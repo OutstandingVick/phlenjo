@@ -1,26 +1,284 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b0c10;
+  --foreground: #f7fff5;
+  --phlenjo-green: #39ff14;
+  --phlenjo-purple: #8a2be2;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #050608;
 }
 
 body {
+  min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.font-display {
+  font-family: "Clash Display", "Arial Black", Impact, var(--font-inter), sans-serif;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.lagos-night {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(3, 4, 8, 0.3) 0%, rgba(5, 6, 8, 0.7) 58%, rgba(5, 6, 8, 0.96) 100%),
+    radial-gradient(circle at 24% 28%, rgba(57, 255, 20, 0.24), transparent 18%),
+    radial-gradient(circle at 74% 16%, rgba(138, 43, 226, 0.26), transparent 24%),
+    #07090d;
+}
+
+.lagos-night::before,
+.lagos-night::after {
+  content: "";
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  height: 36%;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.08) 0 2px,
+    transparent 2px 28px
+  );
+  filter: blur(1px);
+  opacity: 0.35;
+  transform: skewY(-9deg);
+}
+
+.lagos-night::before {
+  top: 18%;
+}
+
+.lagos-night::after {
+  top: 28%;
+  opacity: 0.18;
+  transform: skewY(7deg);
+}
+
+.lagos-road {
+  position: absolute;
+  inset: 42% -18% -12%;
+  background:
+    linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.2) 39%, transparent 40%),
+    linear-gradient(255deg, transparent 40%, rgba(57, 255, 20, 0.22) 41%, transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.8));
+  transform: perspective(420px) rotateX(58deg);
+}
+
+.lagos-lights {
+  position: absolute;
+  bottom: 24%;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--phlenjo-green);
+  box-shadow:
+    0 0 18px var(--phlenjo-green),
+    72px -22px 0 rgba(255, 255, 255, 0.8),
+    112px -14px 0 rgba(138, 43, 226, 0.9),
+    184px 10px 0 rgba(57, 255, 20, 0.8),
+    248px -30px 0 rgba(255, 255, 255, 0.7);
+  opacity: 0.78;
+  animation: light-drift 4s linear infinite;
+}
+
+.lagos-lights-a {
+  left: 8%;
+}
+
+.lagos-lights-b {
+  left: 22%;
+  bottom: 38%;
+  animation-delay: -1.4s;
+}
+
+.lagos-lights-c {
+  left: 2%;
+  bottom: 15%;
+  animation-delay: -2.6s;
+}
+
+.vibe-fill {
+  background: linear-gradient(90deg, #39ff14, #bcffb0 50%, #39ff14);
+  box-shadow: 0 0 24px rgba(57, 255, 20, 0.62);
+  transition: width 320ms ease;
+}
+
+.chat-bubble {
+  animation: bubble-in 280ms ease both;
+}
+
+.option-block {
+  box-shadow: inset 0 -10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.swipe-card {
+  touch-action: pan-y;
+  transition: transform 240ms ease, opacity 240ms ease;
+  user-select: none;
+}
+
+.throw-right {
+  opacity: 0;
+  transform: translateX(120%) rotate(12deg);
+}
+
+.throw-left {
+  opacity: 0;
+  transform: translateX(-120%) rotate(-12deg);
+}
+
+.activity-art {
+  position: relative;
+  height: 275px;
+  overflow: hidden;
+  background-color: #12141a;
+}
+
+.activity-art::before,
+.mini-art::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.beach-card::before {
+  background:
+    radial-gradient(circle at 24% 24%, rgba(57, 255, 20, 0.52), transparent 16%),
+    radial-gradient(circle at 76% 18%, rgba(255, 255, 255, 0.5), transparent 13%),
+    linear-gradient(160deg, rgba(16, 54, 61, 0.95), rgba(12, 14, 18, 0.2) 48%, rgba(31, 84, 71, 0.95)),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.1) 0 2px, transparent 2px 13px);
+}
+
+.night-card::before {
+  background:
+    radial-gradient(circle at 66% 18%, rgba(138, 43, 226, 0.78), transparent 17%),
+    radial-gradient(circle at 28% 42%, rgba(57, 255, 20, 0.42), transparent 12%),
+    linear-gradient(140deg, #151026, #050608 64%);
+}
+
+.chow-card::before {
+  background:
+    radial-gradient(circle at 25% 24%, rgba(255, 122, 26, 0.9), transparent 20%),
+    radial-gradient(circle at 78% 72%, rgba(57, 255, 20, 0.48), transparent 16%),
+    linear-gradient(145deg, #2a1007, #0b0c10 62%);
+}
+
+.culture-card::before {
+  background:
+    radial-gradient(circle at 36% 24%, rgba(33, 199, 255, 0.74), transparent 18%),
+    radial-gradient(circle at 80% 76%, rgba(138, 43, 226, 0.62), transparent 22%),
+    linear-gradient(150deg, #081722, #0b0c10 58%);
+}
+
+.activity-art::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 48%;
+  background: linear-gradient(180deg, transparent, rgba(11, 12, 16, 0.92));
+}
+
+.mini-art {
+  position: relative;
+  display: block;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #15171d;
+}
+
+.traffic-dot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.traffic-dot.green {
+  background: #39ff14;
+  box-shadow: 0 0 14px rgba(57, 255, 20, 0.8);
+}
+
+.traffic-dot.yellow {
+  background: #ffd84d;
+  box-shadow: 0 0 14px rgba(255, 216, 77, 0.8);
+}
+
+.traffic-dot.red {
+  background: #ff3b3b;
+  box-shadow: 0 0 14px rgba(255, 59, 59, 0.8);
+}
+
+.avatar {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 2px solid #0b0c10;
+  border-radius: 999px;
+  background: #39ff14;
+  color: #050608;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+@keyframes light-drift {
+  from {
+    transform: translateX(-80px) translateY(0);
+  }
+  to {
+    transform: translateX(150px) translateY(34px);
+  }
+}
+
+@keyframes bubble-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (min-width: 768px) {
+  body {
+    background:
+      radial-gradient(circle at 50% 0%, rgba(57, 255, 20, 0.16), transparent 30%),
+      radial-gradient(circle at 50% 100%, rgba(138, 43, 226, 0.2), transparent 34%),
+      #050608;
+  }
 }
