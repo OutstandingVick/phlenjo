@@ -282,3 +282,10 @@ button {
       #050608;
   }
 }
+
+@media (min-width: 1024px) {
+  .activity-art {
+    height: min(46vh, 420px);
+    min-height: 320px;
+  }
+}
