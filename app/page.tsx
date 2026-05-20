@@ -58,35 +58,39 @@ export default function Home() {
   }, [activeTab]);
 
   useEffect(() => {
-    try {
-      const rawState = window.localStorage.getItem(STORAGE_KEY);
+    const restoreTimer = window.setTimeout(() => {
+      try {
+        const rawState = window.localStorage.getItem(STORAGE_KEY);
 
-      if (!rawState) {
+        if (!rawState) {
+          setHasLoadedSavedState(true);
+          return;
+        }
+
+        const parsed = JSON.parse(rawState) as Partial<SavedState>;
+        const restoredAnswers = Array.isArray(parsed.answers) ? parsed.answers.filter((answer) => typeof answer === "string") : [];
+        const restoredQuestionIndex =
+          typeof parsed.questionIndex === "number"
+            ? Math.min(Math.max(parsed.questionIndex, 0), questions.length - 1)
+            : Math.min(restoredAnswers.length, questions.length - 1);
+        const restoredTitles = Array.isArray(parsed.savedTitles)
+          ? parsed.savedTitles.filter((title) => typeof title === "string")
+          : defaultSavedTitles;
+
+        setScreen(isScreen(parsed.screen) ? parsed.screen : restoredAnswers.length ? "dashboard" : "welcome");
+        setQuestionIndex(restoredQuestionIndex);
+        setAnswers(restoredAnswers.slice(0, questions.length));
+        setActiveCard(typeof parsed.activeCard === "number" ? Math.max(parsed.activeCard, 0) : 0);
+        setSaved(getActivitiesByTitle(restoredTitles));
+        setActiveTab(isCategory(parsed.activeTab) ? parsed.activeTab : "night");
+      } catch {
+        window.localStorage.removeItem(STORAGE_KEY);
+      } finally {
         setHasLoadedSavedState(true);
-        return;
       }
+    }, 0);
 
-      const parsed = JSON.parse(rawState) as Partial<SavedState>;
-      const restoredAnswers = Array.isArray(parsed.answers) ? parsed.answers.filter((answer) => typeof answer === "string") : [];
-      const restoredQuestionIndex =
-        typeof parsed.questionIndex === "number"
-          ? Math.min(Math.max(parsed.questionIndex, 0), questions.length - 1)
-          : Math.min(restoredAnswers.length, questions.length - 1);
-      const restoredTitles = Array.isArray(parsed.savedTitles)
-        ? parsed.savedTitles.filter((title) => typeof title === "string")
-        : defaultSavedTitles;
-
-      setScreen(isScreen(parsed.screen) ? parsed.screen : restoredAnswers.length ? "dashboard" : "welcome");
-      setQuestionIndex(restoredQuestionIndex);
-      setAnswers(restoredAnswers.slice(0, questions.length));
-      setActiveCard(typeof parsed.activeCard === "number" ? Math.max(parsed.activeCard, 0) : 0);
-      setSaved(getActivitiesByTitle(restoredTitles));
-      setActiveTab(isCategory(parsed.activeTab) ? parsed.activeTab : "night");
-    } catch {
-      window.localStorage.removeItem(STORAGE_KEY);
-    } finally {
-      setHasLoadedSavedState(true);
-    }
+    return () => window.clearTimeout(restoreTimer);
   }, []);
 
   useEffect(() => {
