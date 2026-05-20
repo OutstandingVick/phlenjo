@@ -11,6 +11,7 @@ type DashboardScreenProps = {
   onMove: (direction: "left" | "right") => void;
   onTab: (tab: Category) => void;
   onTrip: () => void;
+  onReset: () => void;
   savedCount: number;
   throwClass: string;
 };
@@ -24,6 +25,7 @@ export function DashboardScreen({
   onMove,
   onTab,
   onTrip,
+  onReset,
   savedCount,
   throwClass,
 }: DashboardScreenProps) {
@@ -37,12 +39,17 @@ export function DashboardScreen({
           <p className="text-xs uppercase tracking-[0.22em] text-white/45">Detty Level</p>
           <p className="font-display text-2xl font-black text-[#39FF14]">87%</p>
         </div>
-        <button className="relative grid size-11 place-items-center rounded-[8px] bg-white/10 text-lg" onClick={onTrip} aria-label="My Trip">
-          💬
-          <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-[#39FF14] text-[10px] font-black text-black">
-            {savedCount}
-          </span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button className="hidden h-11 rounded-[8px] bg-white/10 px-3 text-xs font-black uppercase tracking-[0.12em] text-white/65 transition hover:text-white sm:block" onClick={onReset}>
+            Reset
+          </button>
+          <button className="relative grid size-11 place-items-center rounded-[8px] bg-white/10 text-lg" onClick={onTrip} aria-label="My Trip">
+            💬
+            <span className="absolute -right-1 -top-1 grid size-5 place-items-center rounded-full bg-[#39FF14] text-[10px] font-black text-black">
+              {savedCount}
+            </span>
+          </button>
+        </div>
       </header>
 
       <div className="mx-auto mt-5 flex w-full max-w-6xl items-end justify-between px-1">

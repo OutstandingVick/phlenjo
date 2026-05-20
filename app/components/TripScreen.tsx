@@ -3,18 +3,24 @@ import type { Activity } from "../data/phlenjo";
 type TripScreenProps = {
   activities: Activity[];
   onBack: () => void;
+  onReset: () => void;
 };
 
-export function TripScreen({ activities, onBack }: TripScreenProps) {
+export function TripScreen({ activities, onBack, onReset }: TripScreenProps) {
   const trip = activities.length ? activities : activities.slice(0, 1);
   const slots = ["Morning", "Afternoon", "Night"];
 
   return (
     <section className="min-h-screen px-5 py-6 sm:px-8 lg:min-h-[calc(100vh-3rem)] lg:px-12 xl:px-16">
       <header className="mx-auto mb-8 flex w-full max-w-5xl items-center justify-between">
-        <button className="grid size-11 place-items-center rounded-[8px] bg-white/10 text-lg" onClick={onBack} aria-label="Back to dashboard">
-          ←
-        </button>
+        <div className="flex items-center gap-2">
+          <button className="grid size-11 place-items-center rounded-[8px] bg-white/10 text-lg" onClick={onBack} aria-label="Back to dashboard">
+            ←
+          </button>
+          <button className="h-11 rounded-[8px] bg-white/10 px-3 text-xs font-black uppercase tracking-[0.12em] text-white/65 transition hover:text-white" onClick={onReset}>
+            Reset
+          </button>
+        </div>
         <div className="text-right">
           <p className="text-xs uppercase tracking-[0.24em] text-white/45">My Trip</p>
           <h1 className="font-display text-3xl font-black sm:text-4xl lg:text-5xl">Squad Route</h1>
