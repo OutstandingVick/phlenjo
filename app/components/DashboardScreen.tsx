@@ -1,33 +1,27 @@
-import type { PointerEvent } from "react";
 import type { Activity, Category } from "../data/phlenjo";
 import { tabs } from "../data/phlenjo";
+import { SwipeCard } from "./SwipeCard";
 
 type DashboardScreenProps = {
   activeTab: Category;
   currentActivity: Activity;
   filteredActivities: Activity[];
-  onDragStart: (x: number) => void;
-  onPointerUp: (event: PointerEvent<HTMLElement>) => void;
   onMove: (direction: "left" | "right") => void;
   onTab: (tab: Category) => void;
   onTrip: () => void;
   onReset: () => void;
   savedCount: number;
-  throwClass: string;
 };
 
 export function DashboardScreen({
   activeTab,
   currentActivity,
   filteredActivities,
-  onDragStart,
-  onPointerUp,
   onMove,
   onTab,
   onTrip,
   onReset,
   savedCount,
-  throwClass,
 }: DashboardScreenProps) {
   return (
     <section className="flex min-h-screen flex-col px-4 pb-4 pt-5 sm:px-6 lg:min-h-[calc(100vh-3rem)] lg:px-10 lg:py-8 xl:px-14">
@@ -61,35 +55,7 @@ export function DashboardScreen({
       </div>
 
       <div className="mx-auto mt-4 grid w-full max-w-6xl gap-5 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
-        <article
-          className={`swipe-card ${throwClass} overflow-hidden rounded-[8px] border border-white/10 bg-white/[0.06] shadow-2xl shadow-black/40`}
-          onPointerDown={(event) => onDragStart(event.clientX)}
-          onPointerUp={onPointerUp}
-        >
-          <div className={`activity-art ${currentActivity.imageClass}`}>
-            <div className="absolute left-4 top-4 rounded-full bg-black/55 px-3 py-1 text-xs font-black text-[#39FF14] backdrop-blur">
-              🔥 {currentActivity.crowd}
-            </div>
-          </div>
-          <div className="p-5 lg:p-6">
-            <div className="mb-4 flex items-start justify-between gap-3">
-              <div>
-                <h3 className="font-display text-3xl font-black tracking-normal sm:text-4xl">{currentActivity.title}</h3>
-                <p className="mt-2 text-sm font-bold text-[#39FF14]">🔥 {currentActivity.time}</p>
-                <p className="mt-1 text-sm text-white/65">📍 {currentActivity.location}</p>
-              </div>
-              <span className="grid size-12 place-items-center rounded-full border border-white/10 bg-white/10 text-xl">✨</span>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <button className="h-13 rounded-[8px] border border-white/10 bg-white/10 font-black text-white" onClick={() => onMove("left")}>
-                ← Skip
-              </button>
-              <button className="h-13 rounded-[8px] bg-[#39FF14] font-black text-black shadow-[0_0_22px_rgba(57,255,20,0.35)]" onClick={() => onMove("right")}>
-                Add →
-              </button>
-            </div>
-          </div>
-        </article>
+<SwipeCard activity={currentActivity} onMove={onMove} />
 
         <aside className="rounded-[8px] border border-white/10 bg-white/[0.045] p-4 lg:flex lg:flex-col">
           <div className="mb-4 flex items-center justify-between">
