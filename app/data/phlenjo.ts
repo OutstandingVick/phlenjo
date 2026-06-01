@@ -1,6 +1,8 @@
 export type Screen = "welcome" | "chat" | "dashboard" | "trip";
 export type Category = "night" | "beach" | "chow" | "culture" | "secret";
 export type PriceRange = "₦" | "₦₦" | "₦₦₦" | "₦₦₦₦";
+export type TimeOfDay = "afternoon" | "evening" | "night";
+export type CrowdLevel = "chill" | "social" | "packed";
 
 export type Question = {
   prompt: string;
@@ -15,6 +17,8 @@ export type Activity = {
   area: string;
   bestDay: string;
   priceRange: PriceRange;
+  timeOfDay: TimeOfDay;
+  crowdLevel: CrowdLevel;
   vibe: string;
   crowd: string;
   dressCode: string;
@@ -60,6 +64,8 @@ export const activities: Activity[] = [
     area: "Oniru",
     bestDay: "Saturday",
     priceRange: "₦₦₦",
+    timeOfDay: "afternoon",
+    crowdLevel: "packed",
     vibe: "Beach bottles, sunset DJs, soft-life cabanas",
     crowd: "142 IJGBs added this today",
     dressCode: "Resort fits, slides, shades",
@@ -77,6 +83,8 @@ export const activities: Activity[] = [
     area: "VI",
     bestDay: "Friday",
     priceRange: "₦₦₦₦",
+    timeOfDay: "night",
+    crowdLevel: "packed",
     vibe: "Dark lounge, premium tables, late-night Afrobeats",
     crowd: "96 squads saved this tonight",
     dressCode: "Sharp black, heels, no slippers",
@@ -94,6 +102,8 @@ export const activities: Activity[] = [
     area: "Lekki 1",
     bestDay: "Thursday",
     priceRange: "₦₦",
+    timeOfDay: "evening",
+    crowdLevel: "social",
     vibe: "Spicy grills, street plates, quick squad crawl",
     crowd: "58 foodies are locked in",
     dressCode: "Casual, stain-safe fit",
@@ -111,6 +121,8 @@ export const activities: Activity[] = [
     area: "Lagos Island",
     bestDay: "Sunday",
     priceRange: "₦₦",
+    timeOfDay: "evening",
+    crowdLevel: "chill",
     vibe: "Live sets, art corners, old-Lagos night air",
     crowd: "74 creatives added this",
     dressCode: "Expressive casual, comfy shoes",

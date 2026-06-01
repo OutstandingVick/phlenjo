@@ -1,11 +1,38 @@
-import type { Activity, Category } from "../data/phlenjo";
+import type { Activity, Category, CrowdLevel, PriceRange, TimeOfDay } from "../data/phlenjo";
 import { tabs } from "../data/phlenjo";
 import { SwipeCard } from "./SwipeCard";
+
+type ExploreFilters = {
+  area: string;
+  budget: PriceRange | "all";
+  crowd: CrowdLevel | "all";
+  time: TimeOfDay | "all";
+  trafficFriendlyOnly: boolean;
+};
+
+type FilterOptions = {
+  areas: string[];
+  budgets: PriceRange[];
+  crowds: CrowdLevel[];
+  times: TimeOfDay[];
+};
+
+type FilterHandlers = {
+  area: (area: string) => void;
+  budget: (budget: PriceRange | "all") => void;
+  crowd: (crowd: CrowdLevel | "all") => void;
+  time: (time: TimeOfDay | "all") => void;
+  trafficFriendlyOnly: (enabled: boolean) => void;
+};
 
 type DashboardScreenProps = {
   activeTab: Category;
   currentActivity: Activity;
   filteredActivities: Activity[];
+  filterOptions: FilterOptions;
+  filters: ExploreFilters;
+  onClearFilters: () => void;
+  onFilterChange: FilterHandlers;
   onMove: (direction: "left" | "right") => void;
   onTab: (tab: Category) => void;
   onTrip: () => void;
@@ -17,6 +44,10 @@ export function DashboardScreen({
   activeTab,
   currentActivity,
   filteredActivities,
+  filterOptions,
+  filters,
+  onClearFilters,
+  onFilterChange,
   onMove,
   onTab,
   onTrip,
@@ -82,7 +113,86 @@ export function DashboardScreen({
             ))}
           </nav>
 
-          <div className="mt-2 grid gap-3 lg:content-start">
+          <div className="mt-3 grid gap-3 rounded-[8px] border border-white/10 bg-black/20 p-3">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-white/45">Filters</p>
+              <button className="text-xs font-black uppercase tracking-[0.14em] text-[#39FF14]" onClick={onClearFilters}>
+                Clear
+              </button>
+            </div>
+            <label className="grid gap-1 text-xs font-bold text-white/45">
+              Area
+              <select
+                className="h-10 rounded-[8px] border border-white/10 bg-[#0B0C10] px-3 text-sm font-black text-white outline-none"
+                value={filters.area}
+                onChange={(event) => onFilterChange.area(event.target.value)}
+              >
+                <option value="all">All areas</option>
+                {filterOptions.areas.map((area) => (
+                  <option key={area} value={area}>{area}</option>
+                ))}
+              </select>
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <label className="grid gap-1 text-xs font-bold text-white/45">
+                Budget
+                <select
+                  className="h-10 rounded-[8px] border border-white/10 bg-[#0B0C10] px-3 text-sm font-black text-white outline-none"
+                  value={filters.budget}
+                  onChange={(event) => onFilterChange.budget(event.target.value as PriceRange | "all")}
+                >
+                  <option value="all">Any</option>
+                  {filterOptions.budgets.map((budget) => (
+                    <option key={budget} value={budget}>{budget}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="grid gap-1 text-xs font-bold text-white/45">
+                Time
+                <select
+                  className="h-10 rounded-[8px] border border-white/10 bg-[#0B0C10] px-3 text-sm font-black capitalize text-white outline-none"
+                  value={filters.time}
+                  onChange={(event) => onFilterChange.time(event.target.value as TimeOfDay | "all")}
+                >
+                  <option value="all">Any</option>
+                  {filterOptions.times.map((time) => (
+                    <option key={time} value={time}>{time}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <label className="grid gap-1 text-xs font-bold text-white/45">
+                Crowd
+                <select
+                  className="h-10 rounded-[8px] border border-white/10 bg-[#0B0C10] px-3 text-sm font-black capitalize text-white outline-none"
+                  value={filters.crowd}
+                  onChange={(event) => onFilterChange.crowd(event.target.value as CrowdLevel | "all")}
+                >
+                  <option value="all">Any</option>
+                  {filterOptions.crowds.map((crowd) => (
+                    <option key={crowd} value={crowd}>{crowd}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="flex items-center gap-2 rounded-[8px] border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-black text-white/70">
+                <input
+                  checked={filters.trafficFriendlyOnly}
+                  className="size-4 accent-[#39FF14]"
+                  onChange={(event) => onFilterChange.trafficFriendlyOnly(event.target.checked)}
+                  type="checkbox"
+                />
+                Traffic friendly
+              </label>
+            </div>
+          </div>
+
+          <div className="mt-3 grid gap-3 lg:content-start">
+            {filteredActivities.length === 0 && (
+              <div className="rounded-[8px] border border-white/10 bg-white/[0.04] p-4 text-sm font-bold text-white/55">
+                No matches yet. Clear filters or try another category.
+              </div>
+            )}
             {filteredActivities.map((activity) => (
               <div className="flex items-center gap-3 rounded-[8px] border border-white/10 bg-white/[0.05] p-3" key={activity.title}>
                 <span className={`mini-art ${activity.imageClass}`} />
