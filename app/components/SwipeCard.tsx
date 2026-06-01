@@ -98,16 +98,58 @@ export function SwipeCard({ activity, onMove }: SwipeCardProps) {
         <div className="absolute left-4 top-4 rounded-full bg-black/55 px-3 py-1 text-xs font-black text-[#39FF14] backdrop-blur">
           🔥 {activity.crowd}
         </div>
+        <div className="absolute bottom-4 left-4 right-4 z-10 flex flex-wrap items-end justify-between gap-3">
+          <div className="rounded-[8px] bg-black/55 px-3 py-2 backdrop-blur">
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">Best day</p>
+            <p className="text-sm font-black text-white">{activity.bestDay}</p>
+          </div>
+          <div className="rounded-[8px] bg-[#39FF14] px-3 py-2 text-right text-black shadow-[0_0_22px_rgba(57,255,20,0.35)]">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em]">Budget</p>
+            <p className="text-lg font-black leading-none">{activity.priceRange}</p>
+          </div>
+        </div>
       </div>
-      <div className="p-5 lg:p-6">
-        <div className="mb-4 flex items-start justify-between gap-3">
+
+      <div className="space-y-5 p-5 lg:p-6">
+        <div className="flex items-start justify-between gap-3">
           <div>
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-white/10 px-3 py-1 text-xs font-black text-white/70">{activity.area}</span>
+              <span className="rounded-full bg-[#8A2BE2]/20 px-3 py-1 text-xs font-black text-[#d9c4ff]">{activity.category}</span>
+            </div>
             <h3 className="font-display text-3xl font-black tracking-normal sm:text-4xl">{activity.title}</h3>
             <p className="mt-2 text-sm font-bold text-[#39FF14]">🔥 {activity.time}</p>
             <p className="mt-1 text-sm text-white/65">📍 {activity.location}</p>
           </div>
-          <span className="grid size-12 place-items-center rounded-full border border-white/10 bg-white/10 text-xl">✨</span>
+          <span className="grid size-12 shrink-0 place-items-center rounded-full border border-white/10 bg-white/10 text-xl">✨</span>
         </div>
+
+        <p className="rounded-[8px] border border-white/10 bg-black/20 p-3 text-sm font-semibold leading-6 text-white/78">
+          {activity.vibe}
+        </p>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="rounded-[8px] border border-white/10 bg-white/[0.045] p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">Dress code</p>
+            <p className="mt-1 text-sm font-bold text-white/80">{activity.dressCode}</p>
+          </div>
+          <div className="rounded-[8px] border border-white/10 bg-white/[0.045] p-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/40">Booking note</p>
+            <p className="mt-1 text-sm font-bold text-white/80">{activity.bookingNote}</p>
+          </div>
+        </div>
+
+        <div>
+          <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-white/40">Best for</p>
+          <div className="flex flex-wrap gap-2">
+            {activity.bestFor.map((item) => (
+              <span className="rounded-full border border-[#39FF14]/25 bg-[#39FF14]/10 px-3 py-1 text-xs font-black text-[#b8ffac]" key={item}>
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 gap-3">
           <button className="h-13 rounded-[8px] border border-white/10 bg-white/10 font-black text-white" onClick={() => void completeSwipe("left")}>
             ← Skip

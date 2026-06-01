@@ -55,7 +55,7 @@ export function DashboardScreen({
       </div>
 
       <div className="mx-auto mt-4 grid w-full max-w-6xl gap-5 lg:grid-cols-[minmax(0,1fr)_360px] xl:grid-cols-[minmax(0,1fr)_420px]">
-<SwipeCard activity={currentActivity} onMove={onMove} />
+        <SwipeCard activity={currentActivity} onMove={onMove} />
 
         <aside className="rounded-[8px] border border-white/10 bg-white/[0.045] p-4 lg:flex lg:flex-col">
           <div className="mb-4 flex items-center justify-between">
@@ -87,8 +87,12 @@ export function DashboardScreen({
               <div className="flex items-center gap-3 rounded-[8px] border border-white/10 bg-white/[0.05] p-3" key={activity.title}>
                 <span className={`mini-art ${activity.imageClass}`} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-black">{activity.title}</p>
-                  <p className="text-xs text-white/55">{activity.location}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="truncate font-black">{activity.title}</p>
+                    <span className="shrink-0 text-xs font-black text-[#39FF14]">{activity.priceRange}</span>
+                  </div>
+                  <p className="truncate text-xs text-white/55">{activity.area} · {activity.time}</p>
+                  <p className="mt-1 line-clamp-1 text-xs font-semibold text-white/40">{activity.vibe}</p>
                 </div>
                 <span className="text-[#39FF14]">+</span>
               </div>
