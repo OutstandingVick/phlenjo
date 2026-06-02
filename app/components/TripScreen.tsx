@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import type { Activity } from "../data/phlenjo";
 
 type TripScreenProps = {
@@ -6,9 +9,46 @@ type TripScreenProps = {
   onReset: () => void;
 };
 
+type VoteState = {
+  down: number;
+  userVote?: "up" | "down";
+  up: number;
+};
+
+const initialVotes: VoteState = {
+  down: 1,
+  up: 3,
+};
+
 export function TripScreen({ activities, onBack, onReset }: TripScreenProps) {
   const trip = activities.length ? activities : activities.slice(0, 1);
   const slots = ["Morning", "Afternoon", "Night"];
+  const visibleTrip = [...trip, ...activities].slice(0, 3);
+  const [votes, setVotes] = useState<Record<string, VoteState>>({});
+
+  function getVoteState(title: string) {
+    return votes[title] ?? initialVotes;
+  }
+
+  function voteFor(title: string, vote: "up" | "down") {
+    setVotes((currentVotes) => {
+      const current = currentVotes[title] ?? initialVotes;
+      const next = { ...current };
+
+      if (current.userVote === "up") next.up -= 1;
+      if (current.userVote === "down") next.down -= 1;
+
+      if (current.userVote === vote) {
+        next.userVote = undefined;
+      } else {
+        next.userVote = vote;
+        if (vote === "up") next.up += 1;
+        if (vote === "down") next.down += 1;
+      }
+
+      return { ...currentVotes, [title]: next };
+    });
+  }
 
   return (
     <section className="min-h-screen px-5 py-6 sm:px-8 lg:min-h-[calc(100vh-3rem)] lg:px-12 xl:px-16">
@@ -29,26 +69,65 @@ export function TripScreen({ activities, onBack, onReset }: TripScreenProps) {
 
       <div className="relative mx-auto max-w-5xl pl-7 lg:grid lg:grid-cols-3 lg:gap-5 lg:pl-0">
         <span className="absolute bottom-8 left-[13px] top-2 w-1 rounded-full bg-gradient-to-b from-[#39FF14] via-[#8A2BE2] to-white/20 lg:left-0 lg:right-0 lg:top-8 lg:h-1 lg:w-auto lg:bg-gradient-to-r" />
-        {[...trip, ...activities].slice(0, 3).map((activity, index) => (
-          <article className="relative mb-5 rounded-[8px] border border-white/10 bg-white/[0.06] p-4 lg:mb-0 lg:mt-12" key={`${activity.title}-${index}`}>
-            <span className="absolute -left-[26px] top-5 grid size-6 place-items-center rounded-full bg-[#0B0C10] ring-2 ring-[#39FF14] lg:-top-[42px] lg:left-4">
-              <span className={`traffic-dot ${activity.traffic}`} />
-            </span>
-            <div className="mb-3 flex items-center justify-between">
-              <p className="text-xs font-black uppercase tracking-[0.22em] text-[#39FF14]">{slots[index] ?? "Late"}</p>
-              <div className="flex -space-x-2">
-                <span className="avatar">T</span>
-                <span className="avatar">K</span>
-                <span className="avatar">A</span>
+        {visibleTrip.map((activity, index) => {
+          const voteState = getVoteState(activity.title);
+          const squadLikesIt = voteState.up >= 3 && voteState.up > voteState.down;
+          const squadWarning = voteState.down >= voteState.up;
+
+          return (
+            <article className="relative mb-5 rounded-[8px] border border-white/10 bg-white/[0.06] p-4 lg:mb-0 lg:mt-12" key={`${activity.title}-${index}`}>
+              <span className="absolute -left-[26px] top-5 grid size-6 place-items-center rounded-full bg-[#0B0C10] ring-2 ring-[#39FF14] lg:-top-[42px] lg:left-4">
+                <span className={`traffic-dot ${activity.traffic}`} />
+              </span>
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-[#39FF14]">{slots[index] ?? "Late"}</p>
+                <div className="flex -space-x-2">
+                  <span className="avatar">T</span>
+                  <span className="avatar">K</span>
+                  <span className="avatar">A</span>
+                  <span className="avatar bg-[#8A2BE2] text-white">Y</span>
+                </div>
               </div>
-            </div>
-            <h2 className="font-display text-2xl font-black">{activity.title}</h2>
-            <p className="mt-1 text-sm text-white/60">{activity.time} · {activity.location}</p>
-            <div className="mt-4 rounded-[8px] border border-[#39FF14]/20 bg-[#39FF14]/10 px-3 py-2 text-xs font-bold text-[#b9ffad]">
-              3/4 upvotes. Squad is feeling this.
-            </div>
-          </article>
-        ))}
+              <h2 className="font-display text-2xl font-black">{activity.title}</h2>
+              <p className="mt-1 text-sm text-white/60">{activity.time} · {activity.location}</p>
+
+              <div className={`mt-4 rounded-[8px] border px-3 py-2 text-xs font-bold ${
+                squadWarning
+                  ? "border-[#ff4d4d]/30 bg-[#ff4d4d]/10 text-[#ffb4b4]"
+                  : "border-[#39FF14]/20 bg-[#39FF14]/10 text-[#b9ffad]"
+              }`}>
+                {squadWarning
+                  ? "Omo, your squad isn't feeling this yet."
+                  : squadLikesIt
+                    ? `${voteState.up}/4 upvotes. Squad is feeling this.`
+                    : "Waiting for more squad energy."}
+              </div>
+
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <button
+                  className={`h-11 rounded-[8px] border text-sm font-black transition active:scale-[0.96] ${
+                    voteState.userVote === "up"
+                      ? "border-[#39FF14] bg-[#39FF14] text-black"
+                      : "border-white/10 bg-white/10 text-white"
+                  }`}
+                  onClick={() => voteFor(activity.title, "up")}
+                >
+                  👍 Upvote · {voteState.up}
+                </button>
+                <button
+                  className={`h-11 rounded-[8px] border text-sm font-black transition active:scale-[0.96] ${
+                    voteState.userVote === "down"
+                      ? "border-[#ff4d4d] bg-[#ff4d4d] text-black"
+                      : "border-white/10 bg-white/10 text-white"
+                  }`}
+                  onClick={() => voteFor(activity.title, "down")}
+                >
+                  👎 Down · {voteState.down}
+                </button>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
