@@ -112,11 +112,15 @@ export function usePhlenjoState() {
     return isFinalQuestion;
   }
 
-  function saveCurrentActivity() {
+  function saveActivity(activity: Activity) {
     updateState((current) => {
-      if (current.savedTitles.includes(currentActivity.title)) return current;
-      return { ...current, savedTitles: [...current.savedTitles, currentActivity.title] };
+      if (current.savedTitles.includes(activity.title)) return current;
+      return { ...current, savedTitles: [...current.savedTitles, activity.title] };
     });
+  }
+
+  function saveCurrentActivity() {
+    saveActivity(currentActivity);
   }
 
   function advanceCard() {
@@ -142,6 +146,7 @@ export function usePhlenjoState() {
     answerQuestion,
     advanceCard,
     resetTrip,
+    saveActivity,
     saveCurrentActivity,
     setActiveTab,
   };

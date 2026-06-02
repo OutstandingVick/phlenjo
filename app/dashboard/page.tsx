@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { DashboardScreen } from "../components/DashboardScreen";
 import { PhlenjoFrame } from "../components/PhlenjoFrame";
 import { activities } from "../data/phlenjo";
-import type { CrowdLevel, PriceRange, TimeOfDay } from "../data/phlenjo";
+import type { Activity, CrowdLevel, PriceRange, TimeOfDay } from "../data/phlenjo";
 import { usePhlenjoState } from "../hooks/usePhlenjoState";
 
 export default function DashboardPage() {
@@ -21,6 +21,7 @@ export default function DashboardPage() {
     currentActivity,
     filteredActivities,
     resetTrip,
+    saveActivity,
     saveCurrentActivity,
     saved,
     setActiveTab,
@@ -65,6 +66,10 @@ export default function DashboardPage() {
   }
 
 
+  function addActivityToTrip(activity: Activity) {
+    saveActivity(activity);
+  }
+
   function handleReset() {
     resetTrip();
     router.push("/");
@@ -85,6 +90,7 @@ export default function DashboardPage() {
           trafficFriendlyOnly,
         }}
         onClearFilters={clearFilters}
+        onAddActivity={addActivityToTrip}
         onFilterChange={{
           area: setActiveArea,
           budget: setActiveBudget,

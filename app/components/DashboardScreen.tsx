@@ -31,6 +31,7 @@ type DashboardScreenProps = {
   filteredActivities: Activity[];
   filterOptions: FilterOptions;
   filters: ExploreFilters;
+  onAddActivity: (activity: Activity) => void;
   onClearFilters: () => void;
   onFilterChange: FilterHandlers;
   onMove: (direction: "left" | "right") => void;
@@ -46,6 +47,7 @@ export function DashboardScreen({
   filteredActivities,
   filterOptions,
   filters,
+  onAddActivity,
   onClearFilters,
   onFilterChange,
   onMove,
@@ -204,7 +206,12 @@ export function DashboardScreen({
                   <p className="truncate text-xs text-white/55">{activity.area} · {activity.time}</p>
                   <p className="mt-1 line-clamp-1 text-xs font-semibold text-white/40">{activity.vibe}</p>
                 </div>
-                <span className="text-[#39FF14]">+</span>
+                <button
+                  className="h-10 rounded-[8px] bg-[#39FF14] px-3 text-xs font-black uppercase tracking-[0.12em] text-black shadow-[0_0_18px_rgba(57,255,20,0.24)] transition active:scale-[0.96]"
+                  onClick={() => onAddActivity(activity)}
+                >
+                  Add
+                </button>
               </div>
             ))}
           </div>
